@@ -102,6 +102,15 @@ public interface Libvirt extends Library {
     public static int VIR_UUID_BUFLEN = 16;
     public static int VIR_UUID_STRING_BUFLEN = (36 + 1);
     public static int VIR_DOMAIN_SCHED_FIELD_LENGTH = 80;
+    public static String VIR_DOMAIN_BLKIO_DEVICE_WEIGHT = "device_weight";
+    public static int VIR_DOMAIN_BLKIO_FIELD_LENGTH = 80;
+    public static String VIR_DOMAIN_BLKIO_WEIGHT = "weight";
+    public static String VIR_DOMAIN_BLOCK_IOTUNE_READ_BYTES_SEC = "read_bytes_sec";
+    public static String VIR_DOMAIN_BLOCK_IOTUNE_READ_IOPS_SEC = "read_iops_sec";
+    public static String VIR_DOMAIN_BLOCK_IOTUNE_TOTAL_BYTES_SEC = "total_bytes_sec";
+    public static String VIR_DOMAIN_BLOCK_IOTUNE_TOTAL_IOPS_SEC = "total_iops_sec";
+    public static String VIR_DOMAIN_BLOCK_IOTUNE_WRITE_BYTES_SEC =  "write_bytes_sec";
+    public static String VIR_DOMAIN_BLOCK_IOTUNE_WRITE_IOPS_SEC = "write_iops_sec";
 
     // Connection Functions
     String virConnectBaselineCPU(ConnectionPointer virConnectPtr, String[] xmlCPUs, int ncpus, int flags);
@@ -192,7 +201,9 @@ public interface Libvirt extends Library {
     int virDomainDetachDeviceFlags(DomainPointer virDomainPtr, String deviceXML, int flags);
     int virDomainFree(DomainPointer virDomainPtr);
     int virDomainGetAutostart(DomainPointer virDomainPtr, IntByReference value);
+    int virDomainGetBlkioParameters(DomainPointer virDomainPtr, virBlkioParameter[] params, IntByReference nparams, int flags);
     int virDomainGetBlockInfo(DomainPointer virDomainPtr, String path, virDomainBlockInfo info, int flags);
+    int virDomainGetBlockIoTune(DomainPointer domain, String disk, virBlkioParameter[] params, IntByReference nparams, int flags);
     int virDomainGetID(DomainPointer virDomainPtr);
     int virDomainGetInfo(DomainPointer virDomainPtr, virDomainInfo vInfo);
     int virDomainGetJobInfo(DomainPointer virDomainPtr, virDomainJobInfo vInfo);
@@ -235,6 +246,8 @@ public interface Libvirt extends Library {
     int virDomainResume(DomainPointer virDomainPtr);
     int virDomainSave(DomainPointer virDomainPtr, String to);
     int virDomainSetAutostart(DomainPointer virDomainPtr, int autoStart);
+    int virDomainSetBlkioParameters(DomainPointer virDomainPtr, virBlkioParameter[] params, IntByReference nparams, int flags);
+    int virDomainSetBlockIoTune(DomainPointer domain, String disk, virBlkioParameter[] params, IntByReference nparams, int flags);
     int virDomainSetMaxMemory(DomainPointer virDomainPtr, NativeLong maxMemory);
     int virDomainSetMemory(DomainPointer virDomainPtr, NativeLong maxMemory);
     int virDomainSetSchedulerParameters(DomainPointer virDomainPtr, virSchedParameter[] params, int nparams);

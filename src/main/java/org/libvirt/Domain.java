@@ -3,6 +3,7 @@ package org.libvirt;
 import org.libvirt.jna.DomainPointer;
 import org.libvirt.jna.DomainSnapshotPointer;
 import org.libvirt.jna.Libvirt;
+import org.libvirt.jna.virBlkioParameter;
 import org.libvirt.jna.virDomainBlockInfo;
 import org.libvirt.jna.virDomainBlockStats;
 import org.libvirt.jna.virDomainInfo;
@@ -382,6 +383,33 @@ public class Domain {
         processError();
         return autoStart.getValue() != 0 ? true : false;
     }
+
+    /**
+     * Gets the blkio parameters.
+     *
+     * @param flags
+     *            flags
+     * @return an array of BlkioParameter objects
+     * @throws LibvirtException
+     */
+    public BlkioParameter[] getBlkioParameters(int flags) throws LibvirtException {
+        BlkioParameter[] returnValue = new BlkioParameter[0];
+        virBlkioParameter[] nativeParams = new virBlkioParameter[0];
+        IntByReference nParams = new IntByReference();
+        nParams.setValue(0);
+        libvirt.virDomainGetBlkioParameters(VDP, nativeParams, nParams, 0);
+        processError();
+        nativeParams = new virBlkioParameter[nParams.getValue()];
+        returnValue = new BlkioParameter[nParams.getValue()];
+        libvirt.virDomainGetBlkioParameters(VDP, nativeParams, nParams, flags);
+        processError();
+        for (int x = 0; x < nParams.getValue(); x++) {
+            returnValue[x] = BlkioParameter.create(nativeParams[x]);
+        }
+
+        return returnValue;
+    }
+
 
     /**
      * Provides the connection object associated with a domain.

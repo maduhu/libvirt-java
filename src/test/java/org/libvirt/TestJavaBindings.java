@@ -145,6 +145,12 @@ public final class TestJavaBindings extends TestCase {
         assertNotNull("dom.getID()", dom.getID());
 
         // Execute the code Iterate over the parameters the easy way
+        for (BlkioParameter c : dom.getBlkioParameters(0)) {
+            System.out.println(c.getTypeAsString() + ":" + c.field + ":" + c.getValueAsString());
+        }
+
+
+        // Execute the code Iterate over the parameters the easy way
         for (SchedParameter c : dom.getSchedulerParameters()) {
             System.out.println(c.getTypeAsString() + ":" + c.field + ":" + c.getValueAsString());
         }
